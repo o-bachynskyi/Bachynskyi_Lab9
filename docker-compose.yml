@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:15
+    container_name: bachynskyi_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: library_user
+      POSTGRES_PASSWORD: library_pass
+      POSTGRES_DB: library_db
+    volumes:
+      - ./librarydata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: library_pgadmin
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+
+  python:
+    build: C:/Users/Oleksandr/Desktop/Labs/4Course1Sem/KPPython/Lab9
+    image: python:3.11
+    container_name: library_python
+    depends_on:
+      - db
+    volumes:
+      - C:/Users/Oleksandr/Desktop/Labs/4Course1Sem/KPPython/Lab9:/app
+    working_dir: /app
+    command: tail -f /dev/null
